@@ -7,14 +7,16 @@
 
 #define rc4_decrypt(x, y) rc4_encrypt(x, y)
 
-typedef struct {
-    // ...
-    int x;
-} Arcfour;
-
 typedef unsigned char int8;
 typedef unsigned short int int16;
 typedef unsigned int int32;
+
+// Internal state of the encryption
+typedef struct {
+    int16 i;
+    int8 j;
+    int8 s[256];
+} Arcfour;
 
 Arcfour *rc4_init(int8 *key, int16 size);
 int8 rc4_byte(void);

@@ -7,7 +7,7 @@ void printbin(int8 *text, const int16 size) {
     assert(size > 0);
 
     for (i = size, p = text; i; i--, p++) {
-        if (!((i + 1) % 2)) {
+        if (!(i % 2)) {
             printf(" ");
         }
         printf("%.02x", *p);

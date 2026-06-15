@@ -29,3 +29,18 @@ Arcfour *rc4_init(int8 *key, int16 size) {
 
     return p;
 }
+
+int8 rc4_byte(Arcfour *p) {
+    int8 temp_swap, temp_index;
+
+    p->i = (p->i + 1) % 256;
+    p->j = (p->j + p->s[p->i]);
+
+    temp_swap = p->s[p->i];
+    p->s[p->i] = p->s[p->j];
+    p->s[p->j] = temp_swap;
+
+    temp_index = p->s[p->i] + p->s[p->j];
+
+    return p->s[temp_index];
+}

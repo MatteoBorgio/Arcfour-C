@@ -5,7 +5,9 @@
 #include <string.h>
 #include <unistd.h>
 
-#define rc4_decrypt(x, y) rc4_encrypt(x, y)
+#define export __attribute__((visibility("default")))
+#define rc4_decrypt(x, y, z) rc4_encrypt(x, y, z)
+#define rc4_ununit(x) free(x)
 
 typedef unsigned char int8;
 typedef unsigned short int int16;
@@ -18,6 +20,6 @@ typedef struct {
     int8 s[256];
 } Arcfour;
 
-Arcfour *rc4_init(int8 *key, int16 size);
+export Arcfour *rc4_init(int8 *key, int16 size);
 int8 rc4_byte(Arcfour *p);
-int8 *rc4_encrypt(Arcfour *p, int8 *source, int16 size);
+export int8 *rc4_encrypt(Arcfour *p, int8 *source, int16 size);

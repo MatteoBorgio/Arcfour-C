@@ -27,37 +27,33 @@ int main(void) {
                      "algorithm functioning correctly?";
     size_text = strlen((char *)source);
 
-    printf("Initializing encryption...\n");
+    // 1. CIFRATURA
     rc4 = rc4_init(key, size_key);
-
-    printf("Encrypting...\n");
     encrypted = rc4_encrypt(rc4, source, size_text);
 
-    printf("\nTesto originale: '%s'\n", (char *)source);
-    printf("Testo cifrato (Hex):");
-    if (encrypted != NULL) {
+    printf("Testo originale: %s\n", (char *)source);
+    printf("Cifrato (Hex):   ");
+    if (encrypted != NULL)
         printbin(encrypted, size_text);
-    }
 
-    free(rc4);
+    rc4_ununit(rc4);
 
-    printf("\nRe-initializing for decryption...\n");
+    // 2. DECIFRATURA
     rc4 = rc4_init(key, size_key);
 
-    printf("Decrypting...\n");
-    decrypted = rc4_encrypt(rc4, encrypted, size_text);
+    decrypted = rc4_decrypt(rc4, encrypted, size_text);
 
     if (decrypted != NULL) {
-        printf("Testo decifrato: ");
-        for (int i = 0; i < size_text; i++) {
+        printf("Decifrato:       ");
+        for (int i = 0; i < size_text; i++)
             putchar(decrypted[i]);
-        }
         printf("\n");
     }
 
+    // 3. PULIZIA FINALE
     free(encrypted);
     free(decrypted);
-    free(rc4);
+    rc4_ununit(rc4);
 
     return 0;
 }

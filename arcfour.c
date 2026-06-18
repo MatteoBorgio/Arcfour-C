@@ -1,6 +1,6 @@
 #include "arcfour.h"
 
-Arcfour *rc4_init(int8 *key, int16 size) {
+export Arcfour *rc4_init(int8 *key, int16 size) {
     Arcfour *p;
     p = malloc(sizeof(Arcfour));
 
@@ -46,7 +46,7 @@ int8 rc4_byte(Arcfour *p) {
     return p->s[temp_index];
 }
 
-int8 *rc4_encrypt(Arcfour *p, int8 *source, int16 size) {
+export int8 *rc4_encrypt(Arcfour *p, int8 *source, int16 size) {
     int8 *ciphertext;
     int x;
 

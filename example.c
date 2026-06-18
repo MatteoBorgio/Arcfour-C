@@ -27,24 +27,53 @@ int main(void) {
                      "algorithm functioning correctly?";
     size_text = strlen((char *)source);
 
-    printf("Initializing encryption...\n");
+    printf("Initializing RC4 with key...\n");
     rc4 = rc4_init(key, size_key);
-    printf("Done.\n\n");
-
-    // --- TEST DI VERIFICA DI rc4_init ---
-    if (rc4 != NULL) {
-        printf("Verifica puntatori interni dopo il reset:\n");
-        printf("rc4->i attuale: %d (Atteso: 0)\n", rc4->i);
-        printf("rc4->j attuale: %d (Atteso: 0)\n\n", rc4->j);
-
-        printf("Primi 16 byte della S-Box mescolata (KSA):\n");
-        printbin(rc4->s, 16);
-
-        free(rc4);
-    } else {
-        printf("Errore: rc4_init ha restituito un puntatore NULL.\n");
+    if (rc4 == NULL) {
+        fprintf(stderr, "Errore di inizializzazione.\n");
+        return 1;
     }
-    // -------------------------------------
+
+    int8 *encrypted = malloc(sizeof(int8) * size_text);
+    if (encrypted == NULL) {
+        fprintf(stderr, "Errore allocazione memoria encrypted.\n");
+        free(rc4);
+        return 1;
+    }
+
+    printf("Encrypting plaintext...\n");
+    for (int16 l = 0; l < size_text; l++) {
+        encrypted[l] = rc4_byte(rc4) ^ source[l];
+    }
+
+    printf("\nTesto in chiaro: '%s'\n", (char *)source);
+    printf("Testo cifrato (Hex):");
+    printbin(encrypted, size_text);
+
+    free(rc4);
+
+    printf("\nRe-initializing RC4 for decryption...\n");
+    rc4 = rc4_init(key, size_key);
+
+    int8 *decrypted = malloc(sizeof(int8) * (size_text + 1));
+    if (decrypted == NULL) {
+        fprintf(stderr, "Errore allocazione memoria decrypted.\n");
+        free(encrypted);
+        free(rc4);
+        return 1;
+    }
+
+    printf("Decrypting ciphertext...\n");
+    for (int16 l = 0; l < size_text; l++) {
+        decrypted[l] = rc4_byte(rc4) ^ encrypted[l];
+    }
+    decrypted[size_text] = '\0';
+
+    printf("Testo decifrato ottenuto: '%s'\n", (char *)decrypted);
+
+    free(encrypted);
+    free(decrypted);
+    free(rc4);
 
     return 0;
 }

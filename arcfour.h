@@ -20,4 +20,4 @@ typedef struct {
 
 Arcfour *rc4_init(int8 *key, int16 size);
 int8 rc4_byte(Arcfour *p);
-int8 *rc4_encrypt(int8 *source, int16 size);
+int8 *rc4_encrypt(Arcfour *p, int8 *source, int16 size);

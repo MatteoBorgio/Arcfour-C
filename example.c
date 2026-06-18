@@ -27,7 +27,6 @@ int main(void) {
                      "algorithm functioning correctly?";
     size_text = strlen((char *)source);
 
-    // 1. CIFRATURA
     rc4 = rc4_init(key, size_key);
     encrypted = rc4_encrypt(rc4, source, size_text);
 
@@ -38,7 +37,6 @@ int main(void) {
 
     rc4_ununit(rc4);
 
-    // 2. DECIFRATURA
     rc4 = rc4_init(key, size_key);
 
     decrypted = rc4_decrypt(rc4, encrypted, size_text);
@@ -50,7 +48,6 @@ int main(void) {
         printf("\n");
     }
 
-    // 3. PULIZIA FINALE
     free(encrypted);
     free(decrypted);
     rc4_ununit(rc4);
